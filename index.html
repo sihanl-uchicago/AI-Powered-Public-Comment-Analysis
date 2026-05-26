@@ -6,275 +6,411 @@
 <title>CommentLens – Recommendation Trust Auditor</title>
 
 <style>
+*{box-sizing:border-box}
 body{
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-background:#f7f8fa;
-margin:0;
-color:#1f2937;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:#f6f7fb;
+  margin:0;
+  color:#1f2937;
 }
-
 .container{
-max-width:960px;
-margin:auto;
-padding:40px 20px;
+  max-width:1100px;
+  margin:auto;
+  padding:40px 20px 70px;
 }
-
 .hero{
-background:linear-gradient(135deg,#0f172a,#334155);
-color:white;
-padding:32px;
-border-radius:18px;
-margin-bottom:24px;
+  background:linear-gradient(135deg,#0f172a,#334155);
+  color:white;
+  padding:34px;
+  border-radius:20px;
+  margin-bottom:24px;
 }
-
-.hero h1{
-margin:0 0 12px;
-font-size:34px;
-}
-
+.hero h1{margin:0 0 12px;font-size:36px}
+.hero p{max-width:850px;line-height:1.6;margin:0}
 .card{
-background:white;
-padding:24px;
-border-radius:16px;
-box-shadow:0 4px 14px rgba(0,0,0,.06);
-margin-bottom:22px;
+  background:white;
+  padding:24px;
+  border-radius:18px;
+  box-shadow:0 6px 18px rgba(15,23,42,.07);
+  margin-bottom:22px;
 }
-
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+label{
+  font-weight:650;
+  display:block;
+  margin-bottom:8px;
+}
+select, textarea{
+  width:100%;
+  padding:13px;
+  border-radius:12px;
+  border:1px solid #d1d5db;
+  font-size:15px;
+}
 textarea{
-width:100%;
-height:220px;
-padding:14px;
-font-size:15px;
-border-radius:12px;
-border:1px solid #d1d5db;
-resize:vertical;
+  height:240px;
+  resize:vertical;
+  line-height:1.55;
 }
-
-select{
-width:100%;
-padding:12px;
-border-radius:12px;
-border:1px solid #d1d5db;
-margin-top:8px;
-}
-
 button{
-margin-top:18px;
-background:#111827;
-color:white;
-padding:14px 22px;
-border:none;
-border-radius:12px;
-font-size:16px;
-cursor:pointer;
+  margin-top:18px;
+  background:#111827;
+  color:white;
+  padding:14px 22px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  cursor:pointer;
 }
-
-button:hover{
-opacity:.92;
-}
-
+button:hover{opacity:.92}
 .metric{
-display:inline-block;
-background:#eef2ff;
-padding:14px 18px;
-border-radius:12px;
-margin:8px 8px 8px 0;
-font-weight:600;
+  display:inline-block;
+  background:#eef2ff;
+  padding:14px 18px;
+  border-radius:14px;
+  margin:8px 8px 8px 0;
+  font-weight:650;
 }
-
-.high{color:#15803d;font-weight:700;}
-.medium{color:#b45309;font-weight:700;}
-.low{color:#dc2626;font-weight:700;}
-
-ul{line-height:1.7;}
+.score-row{
+  margin:12px 0;
+}
+.bar{
+  background:#e5e7eb;
+  border-radius:999px;
+  overflow:hidden;
+  height:12px;
+  margin-top:6px;
+}
+.fill{
+  height:12px;
+  background:#334155;
+}
+.high{color:#15803d;font-weight:800}
+.medium{color:#b45309;font-weight:800}
+.low{color:#dc2626;font-weight:800}
+.tag{
+  display:inline-block;
+  padding:7px 10px;
+  border-radius:999px;
+  background:#f1f5f9;
+  margin:4px 4px 4px 0;
+  font-size:14px;
+}
+.note{
+  background:#f8fafc;
+  border-left:4px solid #64748b;
+  padding:14px 16px;
+  border-radius:10px;
+  line-height:1.6;
+}
+ul{line-height:1.75}
+.small{font-size:14px;color:#64748b;line-height:1.6}
+@media(max-width:800px){
+  .grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
 <div class="hero">
-<h1>🔍 Recommendation Trust Auditor</h1>
-<p>
-A lightweight interactive prototype for evaluating whether online recommendations are supported by credible evidence —
-or mainly driven by visibility, repetition, and weak signals.
-</p>
+  <h1>🔍 Recommendation Trust Auditor</h1>
+  <p>
+    A lightweight prototype for reviewing whether online recommendations are supported by specific, balanced, and credible evidence, 
+    or whether they may be shaped by visibility, repetition, promotional language, or weak source context.
+  </p>
 </div>
 
 <div class="card">
-<h2>1. Select Source Type</h2>
+  <h2>1. Research Context</h2>
+  <div class="grid">
+    <div>
+      <label for="platform">Platform / source type</label>
+      <select id="platform">
+        <option>Google Reviews</option>
+        <option>Reddit</option>
+        <option>RedNote / Xiaohongshu</option>
+        <option>TikTok Comments</option>
+        <option>Other Online Discussion</option>
+      </select>
+    </div>
 
-<select id="source">
-<option>Google Reviews</option>
-<option>Reddit</option>
-<option>RedNote / Xiaohongshu</option>
-<option>TikTok Comments</option>
-<option>Other Online Discussion</option>
-</select>
+    <div>
+      <label for="bucket">Source bucket</label>
+      <select id="bucket">
+        <option>User-generated reviews</option>
+        <option>Forum discussion</option>
+        <option>Influencer or promotional content</option>
+        <option>Professional review</option>
+        <option>Mixed or unclear source</option>
+      </select>
+    </div>
+  </div>
 </div>
 
 <div class="card">
-<h2>2. Paste Comments</h2>
-
-<textarea id="comments">
-Loved the coffee and the space was cozy, but the line was almost 25 minutes.
+  <h2>2. Paste Comments or Review Excerpts</h2>
+  <textarea id="comments">Loved the coffee and the space was cozy, but the line was almost 25 minutes.
 Staff were friendly and the pastries were great.
-I saw this place everywhere on TikTok so I expected more.
+I saw this place everywhere on TikTok, so I expected more.
 Good location but overpriced.
 Worth trying once.
 The interior is beautiful and clean.
 Service was a bit slow during brunch.
 Not bad, but slightly overhyped.
 Would come back for the latte.
-</textarea>
+The latte was around $7, which felt high for the size.</textarea>
 
-<button onclick="analyzeComments()">Analyze Evidence</button>
+  <button onclick="analyzeComments()">Analyze Evidence</button>
 </div>
 
 <div id="results"></div>
 
+<div class="card">
+  <h2>Method Note</h2>
+  <p class="small">
+    This prototype does not scrape live platform data, verify individual claims, or use external APIs.
+    It is designed as a policy-oriented research workflow: users paste review excerpts, and the tool structures the evidence,
+    identifies reliability concerns, and labels uncertainty before a recommendation is trusted.
+  </p>
+</div>
+
 </div>
 
 <script>
+function containsAny(text, words){
+  return words.some(w => text.includes(w));
+}
+
+function countMatches(comments, words){
+  let count = 0;
+  let matched = [];
+  comments.forEach(comment=>{
+    const c = comment.toLowerCase();
+    words.forEach(w=>{
+      if(c.includes(w)){
+        count++;
+        matched.push(w);
+      }
+    });
+  });
+  return {count, matched};
+}
+
+function topItems(arr, n=5){
+  const counts = {};
+  arr.forEach(x=>counts[x]=(counts[x]||0)+1);
+  return Object.entries(counts)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,n)
+    .map(x=>x[0]);
+}
+
 function analyzeComments(){
+  const text = document.getElementById("comments").value;
+  const platform = document.getElementById("platform").value;
+  const bucket = document.getElementById("bucket").value;
 
-const text = document.getElementById("comments").value;
-const source = document.getElementById("source").value;
+  const comments = text
+    .split(/\n+/)
+    .map(c=>c.trim())
+    .filter(c=>c.length>0);
 
-const comments = text
-.split(/\n+/)
-.map(c => c.trim())
-.filter(c => c.length > 0);
+  const positiveWords = [
+    "good","great","love","loved","amazing","best","worth","friendly","cozy","clean",
+    "delicious","helpful","favorite","recommend","comfortable","beautiful"
+  ];
 
-const positiveWords = [
-"good","great","love","loved","amazing","best","worth","friendly","cozy","clean"
-];
+  const negativeWords = [
+    "bad","slow","expensive","overpriced","overhyped","crowded","disappointed","rude",
+    "dirty","wait","line","avoid","mediocre","not worth"
+  ];
 
-const negativeWords = [
-"bad","slow","expensive","overpriced","overhyped","crowded","disappointed","rude"
-];
+  const promoWords = [
+    "must try","viral","hidden gem","best ever","life changing","insane","perfect",
+    "everywhere","overhyped","tiktok","influencer"
+  ];
 
-const promoWords = [
-"must try","viral","hidden gem","best ever","life changing","overhyped"
-];
+  const specificWords = [
+    "price","cost","$","dollar","minutes","wait","line","location","parking","reservation",
+    "service","staff","portion","weekday","weekend","brunch","size","menu","latte","coffee"
+  ];
 
-let positive=0;
-let negative=0;
-let promo=0;
+  const themeMap = {
+    "Price / value":["price","cost","expensive","overpriced","worth","$","dollar","value"],
+    "Service":["service","staff","friendly","rude","helpful","slow"],
+    "Quality":["coffee","latte","food","pastry","taste","delicious","quality"],
+    "Atmosphere":["cozy","clean","beautiful","interior","space","crowded","comfortable"],
+    "Access / logistics":["line","wait","minutes","location","parking","reservation","weekday","weekend"]
+  };
 
-comments.forEach(comment=>{
-const c = comment.toLowerCase();
+  const pos = countMatches(comments, positiveWords);
+  const neg = countMatches(comments, negativeWords);
+  const promo = countMatches(comments, promoWords);
+  const specific = countMatches(comments, specificWords);
 
-positiveWords.forEach(w=>{
-if(c.includes(w)) positive++;
-});
+  let themeScores = {};
+  Object.keys(themeMap).forEach(theme=>{
+    themeScores[theme] = countMatches(comments, themeMap[theme]).count;
+  });
 
-negativeWords.forEach(w=>{
-if(c.includes(w)) negative++;
-});
+  const sortedThemes = Object.entries(themeScores).sort((a,b)=>b[1]-a[1]);
 
-promoWords.forEach(w=>{
-if(c.includes(w)) promo++;
-});
-});
+  let sampleScore = comments.length >= 12 ? 3 : comments.length >= 6 ? 2 : comments.length >= 3 ? 1 : 0;
+  let specificityScore = specific.count >= 8 ? 3 : specific.count >= 4 ? 2 : specific.count >= 1 ? 1 : 0;
+  let balanceScore = (pos.count > 0 && neg.count > 0) ? 2 : 1;
+  let promoRiskPenalty = promo.count >= 4 ? -2 : promo.count >= 2 ? -1 : 0;
 
-let strength = "";
-let strengthClass = "";
-let concerns = [];
+  let sourceScore = 1;
+  if(bucket === "Professional review") sourceScore = 2;
+  if(bucket === "Mixed or unclear source") sourceScore = 0;
+  if(bucket === "Influencer or promotional content") sourceScore = 0;
 
-if(comments.length >= 8 && promo < 3){
-strength="High";
-strengthClass="high";
-}else if(comments.length >=4){
-strength="Medium";
-strengthClass="medium";
-}else{
-strength="Low";
-strengthClass="low";
-}
+  const totalScore = sampleScore + specificityScore + balanceScore + sourceScore + promoRiskPenalty;
 
-if(comments.length < 5){
-concerns.push("Limited sample size may not represent broader user experience.");
-}
+  let strength = "Low";
+  let strengthClass = "low";
+  if(totalScore >= 7){
+    strength = "High";
+    strengthClass = "high";
+  }else if(totalScore >= 4){
+    strength = "Medium";
+    strengthClass = "medium";
+  }
 
-if(promo >= 2){
-concerns.push("Repeated hype or promotional language may reflect visibility rather than quality.");
-}
+  let sourceContext = "";
+  if(platform === "Google Reviews"){
+    sourceContext = "Google Reviews can capture broad consumer experience, but ratings may overrepresent highly motivated users and recent visibility.";
+  }else if(platform === "Reddit"){
+    sourceContext = "Reddit can provide candid discussion, but comments may reflect a niche community rather than a representative sample.";
+  }else if(platform === "RedNote / Xiaohongshu"){
+    sourceContext = "RedNote/Xiaohongshu is useful for lifestyle discovery, but posts may be shaped by aesthetics, influencer dynamics, and trend cycles.";
+  }else if(platform === "TikTok Comments"){
+    sourceContext = "Short-form platforms are useful for detecting visibility and popularity, but virality should not be treated as reliability.";
+  }else{
+    sourceContext = "Source reliability depends on who produced the comments, how they were collected, and whether incentives are visible.";
+  }
 
-if(positive > 0 && negative > 0){
-concerns.push("Mixed signals suggest the recommendation is not universally consistent.");
-}
+  let concerns = [];
 
-if(concerns.length===0){
-concerns.push("Evidence appears relatively balanced, but human review is still recommended.");
-}
+  if(comments.length < 6){
+    concerns.push("The sample is small, so the result should be treated as exploratory rather than representative.");
+  }
 
-let html = `
-<div class="card">
-<h2>3. Evidence Summary</h2>
+  if(specific.count < 3){
+    concerns.push("Many comments are vague and do not provide concrete details such as price, wait time, service quality, or location.");
+  }
 
-<div class="metric">Comments Reviewed: ${comments.length}</div>
-<div class="metric">Positive Signals: ${positive}</div>
-<div class="metric">Negative Signals: ${negative}</div>
-<div class="metric">Promotional Signals: ${promo}</div>
+  if(promo.count >= 2){
+    concerns.push("Several comments contain hype or promotional language, which may reflect visibility rather than underlying quality.");
+  }
 
-</div>
+  if(bucket === "Influencer or promotional content"){
+    concerns.push("The selected source bucket has a higher risk of commercial influence and should not be used alone for decision-making.");
+  }
 
-<div class="card">
-<h2>4. Trust Assessment</h2>
+  if(bucket === "Mixed or unclear source"){
+    concerns.push("The source category is unclear, making it harder to assess whether the evidence comes from independent users.");
+  }
 
-<p>
-Evidence Strength:
-<span class="${strengthClass}">
-${strength}
-</span>
-</p>
+  if(pos.count > 0 && neg.count > 0){
+    concerns.push("The comments contain both positive and negative signals, which is useful but also means the final recommendation should include caveats.");
+  }
 
-<p>
-Source Context:
-<strong>${source}</strong>
-</p>
+  if(concerns.length === 0){
+    concerns.push("The evidence is reasonably structured, but the original comments should still be reviewed before drawing a final conclusion.");
+  }
 
-<ul>
-${concerns.map(c=>`<li>${c}</li>`).join("")}
-</ul>
+  const positiveTags = topItems(pos.matched);
+  const negativeTags = topItems(neg.matched);
+  const promoTags = topItems(promo.matched);
+  const specificTags = topItems(specific.matched);
 
-</div>
+  const recommendedUse =
+    strength === "High"
+      ? "This evidence can support a preliminary recommendation, as long as the original comments remain available for review."
+      : strength === "Medium"
+      ? "This evidence is useful for directional insight, but it is not strong enough to support a confident recommendation on its own."
+      : "This evidence is too weak for a confident recommendation and should mainly be used to identify questions for further review.";
 
-<div class="card">
-<h2>5. Decision Brief</h2>
+  const html = `
+  <div class="card">
+    <h2>3. Evidence Map</h2>
+    <div class="metric">Comments reviewed: ${comments.length}</div>
+    <div class="metric">Positive signals: ${pos.count}</div>
+    <div class="metric">Negative signals: ${neg.count}</div>
+    <div class="metric">Specific details: ${specific.count}</div>
+    <div class="metric">Promotional signals: ${promo.count}</div>
 
-<p>
-Based on the comments provided, this recommendation should be treated as
-<strong>${strength==="High" ? "decision-supportive" : "directional but not conclusive"}</strong>.
-</p>
+    <h3>Main themes detected</h3>
+    ${sortedThemes.map(([theme,score])=>`
+      <div class="score-row">
+        <strong>${theme}</strong>: ${score}
+        <div class="bar"><div class="fill" style="width:${Math.min(score*12,100)}%"></div></div>
+      </div>
+    `).join("")}
 
-<p>
-The strongest signals come from repeated user mentions around quality, service, and overall experience.
-However, reviewers should check whether visibility effects, repeated promotional language, or platform-specific bias may be shaping the recommendation.
-</p>
+    <h3>Detected signal words</h3>
+    <p>
+      ${positiveTags.map(t=>`<span class="tag">Positive: ${t}</span>`).join("")}
+      ${negativeTags.map(t=>`<span class="tag">Negative: ${t}</span>`).join("")}
+      ${specificTags.map(t=>`<span class="tag">Specific: ${t}</span>`).join("")}
+      ${promoTags.map(t=>`<span class="tag">Promo risk: ${t}</span>`).join("")}
+    </p>
+  </div>
 
-<p>
-Before relying on this recommendation, a human reviewer should compare evidence across at least one additional source.
-</p>
+  <div class="card">
+    <h2>4. Evidence Strength</h2>
+    <p>Overall evidence strength: <span class="${strengthClass}">${strength}</span></p>
 
-</div>
+    <div class="note">
+      <strong>Score breakdown</strong><br>
+      Sample size: ${sampleScore}/3<br>
+      Specificity: ${specificityScore}/3<br>
+      Balance of positive and negative evidence: ${balanceScore}/2<br>
+      Source bucket: ${sourceScore}/2<br>
+      Promotional language adjustment: ${promoRiskPenalty}<br>
+      <strong>Total score: ${totalScore}</strong>
+    </div>
 
-<div class="card">
-<h2>6. Human Review Checklist</h2>
+    <p style="margin-top:16px;"><strong>Source context:</strong> ${sourceContext}</p>
+  </div>
 
-<ul>
-<li>☐ Are comments coming from independent users?</li>
-<li>☐ Are specific details present beyond vague praise?</li>
-<li>☐ Is more than one platform represented?</li>
-<li>☐ Could visibility or influencer amplification be shaping results?</li>
-<li>☐ Is uncertainty clearly communicated before a final recommendation?</li>
-</ul>
-</div>
-`;
+  <div class="card">
+    <h2>5. Reliability Concerns</h2>
+    <ul>
+      ${concerns.map(c=>`<li>${c}</li>`).join("")}
+    </ul>
+  </div>
 
-document.getElementById("results").innerHTML = html;
+  <div class="card">
+    <h2>6. Decision Brief</h2>
+    <p><strong>Finding:</strong> The pasted comments suggest that the strongest visible themes are ${sortedThemes[0][0]} and ${sortedThemes[1][0]}.</p>
+    <p><strong>Evidence basis:</strong> The tool reviewed ${comments.length} comments from ${platform}, classified as ${bucket.toLowerCase()}.</p>
+    <p><strong>Reliability concern:</strong> ${concerns[0]}</p>
+    <p><strong>Recommended use:</strong> ${recommendedUse}</p>
+    <p><strong>Human review needed:</strong> A reviewer should inspect original comments, compare at least one additional source, and check whether repeated language reflects genuine consensus or platform visibility.</p>
+  </div>
+
+  <div class="card">
+    <h2>7. Human Review Checklist</h2>
+    <ul>
+      <li>☐ Are the comments from independent users?</li>
+      <li>☐ Do the comments include specific details rather than only vague praise?</li>
+      <li>☐ Is there evidence from more than one platform?</li>
+      <li>☐ Could SEO, influencer marketing, or platform algorithms be shaping what appears most visible?</li>
+      <li>☐ Does the final recommendation communicate uncertainty?</li>
+      <li>☐ Would this evidence be sufficient if used in a policy, market research, or consumer protection setting?</li>
+    </ul>
+  </div>
+  `;
+
+  document.getElementById("results").innerHTML = html;
 }
 </script>
 
