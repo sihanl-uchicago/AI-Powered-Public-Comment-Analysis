@@ -101,17 +101,3 @@ This project demonstrates:
 
 More broadly, it reflects my interest in building tools that sit between technical implementation and institutional decision-making—especially where AI affects how people interpret evidence, form judgment, and make decisions.
 
----
-
-## Author
-
-**Sofia Liu**  
-M.P.P. Candidate — Finance & Data Analytics  
-
-
-Interests:
-- AI Policy
-- Trust & Safety
-- Human-Centered AI
-- Public Sector Technology
-- AI-Assisted Research & Decision Support
