@@ -107,7 +107,7 @@ More broadly, it reflects my interest in building tools that sit between technic
 
 **Sofia Liu**  
 M.P.P. Candidate — Finance & Data Analytics  
-:contentReference[oaicite:1]{index=1}
+
 
 Interests:
 - AI Policy
